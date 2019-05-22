@@ -30,10 +30,10 @@ const bucket = () => {
 program
   .command('switch')
   .description('switch to another config')
-  .action(async function() {
+  .action(function() {
     const config = loadConfig();
     const choices = config.configs.map((conf, idx) => ({ key: idx.toString(), name: conf.name, value: idx }));
-    await inquirer
+    return inquirer
       .prompt([
         {
           type: 'list',
