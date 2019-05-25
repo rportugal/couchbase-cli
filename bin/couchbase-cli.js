@@ -19,12 +19,12 @@ const saveConfig = config => {
   fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
 };
 
-const bucket = () => {
+const openBucket = name => {
   const config = loadConfig();
   const currentConfig = config.configs[config.current];
   const { url, username, password, insecure } = currentConfig;
   const conn = new Couchbase(url, username, password, { insecure });
-  return conn.openBucket('digital');
+  return conn.openBucket(name);
 };
 
 program
@@ -48,11 +48,11 @@ program
       });
   });
 program
-  .command('get <documentId>')
+  .command('get <bucket> <documentId>')
   .description('get a document')
-  .action(async function(documentId) {
+  .action(async function(bucket, documentId) {
     try {
-      const data = await bucket().get(documentId);
+      const data = await openBucket(bucket).get(documentId);
       console.log(JSON.stringify(data, null, 2));
     } catch (e) {
       console.error(e);
@@ -61,11 +61,11 @@ program
   });
 
 program
-  .command('query <n1ql>')
+  .command('query <bucket> <n1ql>')
   .description('run a N1QL query')
-  .action(async function(n1ql) {
+  .action(async function(bucket, n1ql) {
     try {
-      const data = await bucket().query(n1ql);
+      const data = await openBucket(bucket).query(n1ql);
       console.log(JSON.stringify(data, null, 2));
     } catch (e) {
       console.error(e);
@@ -74,11 +74,25 @@ program
   });
 
 program
-  .command('remove <docId> [otherDocIds...]')
+  .command('remove <bucket> <docId> [otherDocIds...]')
   .description('remove documents')
-  .action(function(docId, otherDocIds) {
+  .action(function(bucket, docId, otherDocIds) {
     if (otherDocIds) {
       // ...
     }
   });
+
+program
+  .command('list <bucket> <skip> <limit>')
+  .description('lists documents in bucket')
+  .action(async function(bucket, skip, limit) {
+    try {
+      const data = await openBucket(bucket).list(skip, limit);
+      console.log(JSON.stringify(data, null, 2));
+    } catch (e) {
+      console.error(e);
+      process.exit(1);
+    }
+  });
+
 program.parse(process.argv);

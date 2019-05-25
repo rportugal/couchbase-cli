@@ -1,6 +1,6 @@
 {
   "name": "couchbase-cli",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "",
   "bin": {
     "couchbase-cli": "bin/couchbase-cli.js"
@@ -21,7 +21,7 @@
   "homepage": "https://github.com/rportugal/couchbase-cli#readme",
   "dependencies": {
     "commander": "^2.20.0",
-    "couchbase-js": "^0.2.0",
+    "couchbase-js": "^0.3.0",
     "inquirer": "^6.3.1"
   }
 }
