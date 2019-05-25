@@ -22,6 +22,7 @@
 
 # Commands
 ```
-couchbase-cli get <documentId>
-couchbase-cli query <query>
+couchbase-cli get <bucket> <documentId>
+couchbase-cli query <bucket> <query>
+couchbase-cli list <bucket> <skip> <limit>
 ```
